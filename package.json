@@ -1,0 +1,45 @@
+{
+  "name": "mcode-shim",
+  "version": "0.1",
+  "description": "FHIR Facade Server implementing @asymmetrik/node-fhir-server-core",
+  "main": "src/index.js",
+  "contributors": [
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.6"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=production; node src/index.js;",
+    "nodemon": "cross-env NODE_ENV=development; node scripts/nodemon;",
+    "test": "npm run test:lint;",
+    "test:lint": "eslint \"src/**/*.js\"",
+    "test:jest": "jest --forceExit"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "collectCoverage": false,
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/testutils/"
+    ]
+  },
+  "dependencies": {
+    "@asymmetrik/node-fhir-server-core": "git+https://github.com/Asymmetrik/node-fhir-server-core.git",
+    "moment-timezone": "^0.5.14",
+    "var": "^0.3.2",
+    "fhir-kit-client": ""
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.6",
+    "eslint": "^4.14.0",
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.3"
+  },
+  "private": false
+}
