@@ -32,13 +32,18 @@
     "@asymmetrik/node-fhir-server-core": "git+https://github.com/Asymmetrik/node-fhir-server-core.git",
     "moment-timezone": "^0.5.14",
     "var": "^0.3.2",
-    "fhir-kit-client": ""
+    "fhir-kit-client": "",
+    "fhirpath" : "",
+    "underscore" : ""
+
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
     "eslint": "^4.14.0",
     "jest": "^23.5.0",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "rewire" : ""
+
   },
   "private": false
 }
