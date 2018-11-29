@@ -1,7 +1,7 @@
 let fhirClientConfig = {
-  baseUrl: "http://localhost:8080/ehr-server/r4"
-}
+  baseUrl: 'http://localhost:3000/api/v1'
+};
 
 module.exports = {
   fhirClientConfig
-}
+};

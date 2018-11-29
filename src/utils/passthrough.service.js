@@ -2,7 +2,7 @@
 const { RESOURCES } = require('@asymmetrik/node-fhir-server-core').constants;
 const FHIRServer = require('@asymmetrik/node-fhir-server-core');
 const Client = require('fhir-kit-client');
-const {fhirClientConfig}  = require('../client.config');
+const {fhirClientConfig} = require('../client.config');
 
 const {bundleToResourceList} = require('./response.utils');
 let getMeta = (base_version) => {
@@ -32,7 +32,7 @@ module.exports = class PassThroughService {
 
         let fhirClient = new Client({ baseUrl: fhirClientConfig.baseUrl });
         fhirClient.bearerToken = context.token;
-        fhirClient.search({ resourceType: this.resourceType , searchParams: args} )
+        fhirClient.search({ resourceType: this.resourceType, searchParams: args} )
         .then((response) => {
           let Resource = this.getResource(base_version);
           let resourceList = bundleToResourceList(response);
@@ -51,9 +51,9 @@ module.exports = class PassThroughService {
         let { base_version, id } = args;
         let fhirClient = new Client({ baseUrl: fhirClientConfig.baseUrl });
         fhirClient.bearerToken = context.token;
-        fhirClient.read({ resourceType: this.resourceType , id: id })
+        fhirClient.read({ resourceType: this.resourceType, id: id })
         .then((response) => {
-            if(!response.meta){
+            if (!response.meta){
               response.meta = {};
             }
             resolve(response);
@@ -104,4 +104,4 @@ module.exports = class PassThroughService {
         resolve();
     });
   }
-}
+};

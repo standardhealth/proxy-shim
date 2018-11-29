@@ -13,8 +13,8 @@ const env = require('var');
  */
 module.exports.strategy = new Strategy(
     function(token, done) {
-    if(!token){
-      return done(new Error('Null token provided for authentication'))
+    if (!token){
+      return done(new Error('Null token provided for authentication'));
     }
 
     // If there isn't an introspection url provide a local means

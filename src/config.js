@@ -1,7 +1,7 @@
 const { VERSIONS, RESOURCES } = require('@asymmetrik/node-fhir-server-core').constants;
 const env = require('var');
 
-const PassThroughService = require('./utils/passthrough.service')
+const PassThroughService = require('./utils/passthrough.service');
 
 
 // Set up whitelist
