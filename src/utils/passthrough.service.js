@@ -7,7 +7,9 @@ const {fhirClientConfig}  = require('../client.config');
 const {bundleToResourceList} = require('./response.utils');
 let getMeta = (base_version) => {
 	return require(FHIRServer.resolveFromVersion(base_version, RESOURCES.META));};
-
+let getPatient = (base_version) => {
+  return require(FHIRServer.resolveFromVersion(base_version, RESOURCES.PATIENT));};
+  
 
 module.exports = class PassThroughService {
 
@@ -16,12 +18,18 @@ module.exports = class PassThroughService {
   }
 
   search(args, context, logger){
+    console.log(args);
     return new Promise((resolve, reject) => {
         let fhirClient = new Client({ baseUrl: fhirClientConfig.baseUrl });
         fhirClient.bearerToken = context.token;
-        fhirClient.search({ resourceType: this.resourceType , searchParams: args} )
+        fhirClient.search({ resourceType: this.resourceType , searchParams: {}} )
         .then((response) => {
-            resolve(bundleToResourceList(response));
+          let Patient = getPatient('3_0_1');
+          let rrlist = bundleToResourceList(response);
+          rrlist.forEach(function(element, i, returnArray) {
+            returnArray[i] = new Patient(element);
+          })
+            resolve(rrlist);
           }).catch(reject);
 
     });
