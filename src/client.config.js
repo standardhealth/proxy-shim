@@ -1,5 +1,5 @@
 let fhirClientConfig = {
-  baseUrl: "http://launch.smarthealthit.org/v/r3/fhir"
+  baseUrl: "http://localhost:8080/ehr-server/r4"
 }
 
 module.exports = {

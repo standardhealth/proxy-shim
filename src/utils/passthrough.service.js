@@ -10,26 +10,33 @@ let getMeta = (base_version) => {
 let getPatient = (base_version) => {
   return require(FHIRServer.resolveFromVersion(base_version, RESOURCES.PATIENT));};
   
+let resourceResolver = {};
 
 module.exports = class PassThroughService {
 
   constructor(resourceType){
     this.resourceType = resourceType;
+    let getResource = (base_version) => {
+      return require(FHIRServer.resolveFromVersion(base_version, resourceType));
+    };
+    this.getResource = getResource;
   }
 
+
+
   search(args, context, logger){
-    console.log(args);
     return new Promise((resolve, reject) => {
         let fhirClient = new Client({ baseUrl: fhirClientConfig.baseUrl });
         fhirClient.bearerToken = context.token;
         fhirClient.search({ resourceType: this.resourceType , searchParams: {}} )
         .then((response) => {
-          let Patient = getPatient('3_0_1');
-          let rrlist = bundleToResourceList(response);
-          rrlist.forEach(function(element, i, returnArray) {
-            returnArray[i] = new Patient(element);
+          let Resource = this.getResource(args.base_version);
+          let resourceList = bundleToResourceList(response);
+          console.log(resourceList);
+          resourceList.forEach(function(element, i, returnArray) {
+            returnArray[i] = new Resource(element);
           })
-            resolve(rrlist);
+            resolve(resourceList);
           }).catch(reject);
 
     });
