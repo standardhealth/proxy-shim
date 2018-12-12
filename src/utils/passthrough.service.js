@@ -26,13 +26,16 @@ module.exports = class PassThroughService {
 
   search(args, context, logger){
     return new Promise((resolve, reject) => {
+      //prune the args
+      const base_version = args.base_version;
+      delete args.base_version;
+
         let fhirClient = new Client({ baseUrl: fhirClientConfig.baseUrl });
         fhirClient.bearerToken = context.token;
-        fhirClient.search({ resourceType: this.resourceType , searchParams: {}} )
+        fhirClient.search({ resourceType: this.resourceType , searchParams: args} )
         .then((response) => {
-          let Resource = this.getResource(args.base_version);
+          let Resource = this.getResource(base_version);
           let resourceList = bundleToResourceList(response);
-          console.log(resourceList);
           resourceList.forEach(function(element, i, returnArray) {
             returnArray[i] = new Resource(element);
           })
