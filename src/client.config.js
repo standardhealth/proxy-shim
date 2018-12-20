@@ -1,5 +1,5 @@
 let fhirClientConfig = {
-  baseUrl: 'http://localhost:3000/api/v1'
+  baseUrl: 'https://fhir-ehr.sandboxcerner.com/dstu2/0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca'
 };
 
 module.exports = {

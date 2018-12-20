@@ -30,20 +30,22 @@
   },
   "dependencies": {
     "@asymmetrik/node-fhir-server-core": "git+https://github.com/Asymmetrik/node-fhir-server-core.git",
+    "fetch-with-proxy": "",
+    "fhir-kit-client": "file:../fhir-kit-client",
+    "fhirpath": "",
+    "http-proxy-agent": "",
     "moment-timezone": "^0.5.14",
+    "underscore": "",
     "var": "^0.3.2",
-    "fhir-kit-client": "",
-    "fhirpath" : "",
-    "underscore" : ""
-
+    "wreck": "",
+    "fhir.js":"git+https://github.com/FHIR/fhir.js.git"
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
     "eslint": "^4.14.0",
     "jest": "^23.5.0",
     "nodemon": "^1.18.3",
-    "rewire" : ""
-
+    "rewire": ""
   },
   "private": false
 }

@@ -27,6 +27,7 @@ let supportedResources = [RESOURCES.ACCOUNT,
                           RESOURCES.CONDITION,
                           RESOURCES.DEVICE,
                           RESOURCES.PROCEDURE,
+                          RESOURCES.PRACTITIONER,
                           RESOURCES.ENCOUNTER,
                           RESOURCES.MEDICATIONREQUEST];
 let profiles = {};
@@ -60,7 +61,7 @@ let fhirServerConfig = {
 		// allow Access-Control-Allow-Origin
 		corsOptions: {
 			maxAge: 86400,
-			origin: whitelist
+			origin: ['*','http://mm221745-pc.mitre.org:3000']
 		}
 	},
 	logging: {
