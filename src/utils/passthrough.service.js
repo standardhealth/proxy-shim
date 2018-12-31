@@ -1,5 +1,6 @@
 const FHIRServer = require('@asymmetrik/node-fhir-server-core');
-const Client = require('fhir-kit-client');
+var mkFhir = require('fhir.js');
+
 const {
   fhirClientConfig
 } = require('../client.config');
@@ -29,18 +30,16 @@ module.exports = class PassThroughService {
   }
   search(args, context, logger) {
     return new Promise((resolve, reject) => {
-      logger.info(this.resourceType + ' >>> search');
-      //prune the args
-      const base_version = args.base_version;
-      delete args.base_version;
-
-      let fhirClient = new Client({
-        baseUrl: fhirClientConfig.baseUrl
-      });
-      fhirClient.bearerToken = context.token;
+      let options = {
+        baseUrl: fhirClientConfig.baseUrl,
+        auth: {
+          bearer: context.token
+        }
+      };
+      var fhirClient = mkFhir(options);
       fhirClient.search({
-          resourceType: this.resourceType,
-          searchParams: args
+          type: this.resourceType,
+          query: args
         })
         .then((response) => {
           let Resource = this.getResource(base_version);
@@ -58,19 +57,24 @@ module.exports = class PassThroughService {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> searchById');
       let {
+        base_version,
         id
       } = args;
-      let fhirClient = new Client({
-        baseUrl: fhirClientConfig.baseUrl
-      });
-      fhirClient.bearerToken = context.token;
+      let options = {
+        baseUrl: fhirClientConfig.baseUrl,
+        auth: {
+          bearer: context.token
+        }
+      };
+      var fhirClient = mkFhir(options);
       fhirClient.read({
-          resourceType: this.resourceType,
+          type: this.resourceType,
           id: id
         })
         .then((response) => {
-          if (!response.meta) {
-            response.meta = {};
+          let data = response.data;
+          if (!data.meta) {
+            data.meta = {};
           }
           resolve(this.mapResource(response));
         }).catch(reject);

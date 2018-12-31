@@ -3,7 +3,7 @@ const cors = require('cors')
 const url = require('url');
 var bodyParser = require('body-parser');
 const querystring = require('querystring');
-
+const request = require('request')
 var mkFhir = require('fhir.js');
 
 const {fhirClientConfig} = require('../client.config');
@@ -20,6 +20,25 @@ var rawBodySaver = function (req, res, buf, encoding) {
   }
 }
 
+var authUris = function(response){
+  for( var x in response.data.rest){
+    var entry = response.data.rest[x];
+    if(entry.mode === "server"){
+      for( let i in entry.security.extension){
+        let ex = entry.security.extension[i];
+        if(ex.url == "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris"){
+          var uris = {};
+          for(let j in ex.extension){
+            let uri = ex.extension[j];
+            uris[uri.url]=uri.valueUri;
+          }
+          return uris;
+        }
+      }
+    }
+  }
+}
+
 let build = function(server) {
   let router = express.Router();
 
@@ -30,15 +49,14 @@ let build = function(server) {
 
   router.get('/authorize', cors(default_cors_options), function (req, res) {
     var fhirClient = mkFhir(options);
-    console.log(options);
-    console.log(fhirClient);
 
     fhirClient.conformance(fhirClientConfig).then((response) => {
-      console.log(response.data.rest.security);
+      let uris = authUris(response);
       let params = req.query;
       params['aud'] = fhirClientConfig.baseUrl;
+      console.log("sending redirect back to client");
       res.redirect(301, url.format({
-           pathname: response.authorizeUrl,
+           pathname: uris.authorize,
            query: params
          }));
     });
@@ -46,33 +64,31 @@ let build = function(server) {
 
 
   router.post('/token', cors(default_cors_options), function (req, res) {
-    console.log("POST TOKEN");
     let formEnc = (req.headers['content-type'] || '').indexOf('application/x-www-form-urlencoded') >= 0
     var fhirClient = mkFhir({
         baseUrl: fhirClientConfig.baseUrl
     });
-    fhirClient.conformance().then((response) => {
-
+    fhirClient.conformance(fhirClientConfig).then((response) => {
+      let uris = authUris(response);
       // need querystring and body payload to send
       let query = req.query;
-      let body = req.body;
-
+      let body = formEnc ? req.rawBody : {form: req.body};
       let options = {
+        url: uris.token,
         headers: {}
       };
       if(formEnc){
         options.headers['content-type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
-        options.payload = req.rawBody
       }else{
         options.headers['content-type'] = 'application/json';
-        options.payload = body;
       }
 
-      wreck.post(response.tokenUrl.href, options).then((result) => {
-
-        console.log(result.payload);
-        res.status(200).send(result.payload);
-      }).catch((e) => console.log(e));
+      request.post({url: uris.token, form: req.body}, (err,httpResponse,body) => {
+        if(err){
+          console.log(err);
+        }
+        res.status(httpResponse.statusCode).send(body);
+      });
     });
   });
   return router;

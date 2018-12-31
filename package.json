@@ -31,7 +31,6 @@
   "dependencies": {
     "@asymmetrik/node-fhir-server-core": "git+https://github.com/Asymmetrik/node-fhir-server-core.git",
     "fetch-with-proxy": "",
-    "fhir-kit-client": "file:../fhir-kit-client",
     "fhirpath": "",
     "http-proxy-agent": "",
     "moment-timezone": "^0.5.14",
