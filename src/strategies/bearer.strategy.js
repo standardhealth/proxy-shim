@@ -23,8 +23,8 @@ module.exports.strategy = new Strategy(
     if (!env.INTROSPECTION_URL) {
       let context = {token};
       let scope = 'patient/*.read, procedure/*.read, condition/*.read, organization/*.read';
-      let user = {scope,context};
-			return done(null, user,{scope, context});
+      let user = {scope, context};
+			return done(null, user, {scope, context});
 		}
 
     // CLIENT_ID and CLIENT_SECRET must match those of the client that this

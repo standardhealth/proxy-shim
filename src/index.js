@@ -1,5 +1,5 @@
 const FHIRServer = require('@asymmetrik/node-fhir-server-core');
-const { VERSIONS } = FHIRServer.constants;
+
 
 const {
 	fhirServerConfig

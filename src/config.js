@@ -29,10 +29,10 @@ let supportedResources = [RESOURCES.ACCOUNT,
                           RESOURCES.ENCOUNTER,
                           RESOURCES.MEDICATIONREQUEST];
 let profiles = {};
-for(var i in supportedResources){
+for (var i in supportedResources){
   let profile = supportedResources[i];
   profiles[profile] = { service: new PassThroughService(profile),
-                  versions: [ VERSIONS['3_0_1'] ]}
+                  versions: [ VERSIONS['3_0_1'] ]};
 }
 
 

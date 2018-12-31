@@ -1,159 +1,146 @@
 const fhirpath = require('fhirpath');
-const _ = require("underscore");
-
+const _ = require('underscore');
+// embdedded function to inspect the results of fhir path calls to tell if something
+// returned an object or 'true'.  This is used to wrap the filter/ignore/exclude
+// functions to dtermin the truthyness of the fhir path calls
 let isTrue = (arg) => {
-  if(Array.isArray(arg) ){
+  if (Array.isArray(arg) ){
     return arg.find(i => isTrue(i));
-  }else if(typeof arg === "object"){
+  } else if (typeof arg === 'object'){
     return !_.isEmpty(arg);
-  }else if(typeof arg === "string" && arg ==="false"){
+  } else if (typeof arg === 'string' && arg === 'false'){
     return false;
   }
   return arg;
-}
+};
+
+// function to build the exec methods for FilterMappers.  The exec function modifies
+// the resource.  If the value is a string it will try to require the function else {
+// if it is a function it will simply pass back the value of the argument.
 
 let buildProcessor = (arg) => {
   let processor = null;
-  switch(typeof arg) {
-    case "string":
+  switch (typeof arg) {
+    case 'string':
       processor = require(arg);
       break;
-    case "function":
+    case 'function':
       processor = arg;
       break;
   }
   return processor;
-}
+};
 
+// build a filter for use in the filter/ingnore/exclude operations
+// the filter may be a string or a function.  If it is a string it is treated as
+// a fhirpath expression and a filtering function will be built around that expression.
+// if it is a function then it will simply be returned.
 let buildFilter = (arg) => {
   // if string create a filter out of it
-  if(Array.isArray(arg)){
+  if (Array.isArray(arg)){
     let filters = arg.map( f => buildFilter(f));
-    return (resource) => {return filters.find( filter => isTrue(filter(resource)))}
+    return (resource) => {return filters.find( filter => isTrue(filter(resource)));};
   }
   let filter = null;
-  switch(typeof arg) {
-    case "string":
+  switch (typeof arg) {
+    case 'string': {
       let path = fhirpath.compile(arg);
       filter = (resource) => isTrue(path(resource));
-      break;
-    case "function":
+      break;}
+    case 'function':{
       filter = arg;
-      break;
+      break;}
   }
   return filter;
-}
+};
 
-let buildFilterMappers = (arg) =>{
-  if(Array.isArray(arg)){
-    return arg.map(fm => buildFilterMappers(fm));
+// Build mappers from the arguments that are passed in.  If the args are null/undefined
+// return an empty array.
+// if the args are an array return an array of mappers
+// if the args are an object that represent either an aggregate or filter mapper
+// create one and return it
+// if the args are a json object with string: object mappings treate the strings as
+// potential filters and or descriptions of the mapper and return an aggregate or filter
+// mapper depending on the rest of the attributes in the json object.
+let buildMappers = (args) =>{
+  if (!args) {return [];}
+  // if the args are an array build an array of mappers to return
+  if (Array.isArray(args)){
+    return args.map(m => buildMappers(m));
   }
-  else{
-    switch(typeof arg) {
-      case "string":
-        return require(arg);
-        break;
-      case "object":
-        if(typeof arg.filter === 'function' && typeof arg.execute === 'function'){
-          return arg;
-        }
-        return new FilterMapper(arg)
-        break;
-    }
-  }
-}
-
-
-let buildResourceMappers = (args) => {
-  let mappers = {};
-  for(var resourceType in args){
-    let mapper = args[resourceType];
-    if(typeof mapper === 'string'){
-      mappers[resourceType] = require(mapper);
-    }else if(typeof mapper === 'object' && !mapper.constructor.name === "Object"){
-      mappers[resourceType] = mapper;
-    }else {
-      mappers[resourceType] = new ResourceTypeMapper(mapper);
-    }
-  }
-  return mappers;
-}
-
-
-class MappingEngine {
-
-  constructor(args){
-    this.mappers = buildResourceMappers(args.resourceMappers);
-    this.defaultFn = buildProcessor(args.default);
-    this.ignoreFn = buildFilter(args.filter)
-    this.excludeFn = buildFilter(args.exclude)
-  }
-
-  ignore(resource){
-    return this.ignoreFn ? this.ignoreFn(resource) : false
-  }
-
-  exclude(resource){
-    return this.excludeFn ? this.excludeFn(resource) : false
-  }
-
-  default(resource){
-    return this.defaultFn ? this.defaultFn(resource) : resource;
-  }
-
-  execute(resource){
-    if(Array.isArray(resource)){
-      return resource.map( r => this.execute(r)).filter(n => n)
-    }else{
-      if(this.ignore(resource)){return resource};
-      if(this.exclude(resource)){return null;};
-      let mapper = this.mappers[type];
-      if(mapper){
-        return mapper.execute(resource);
-      }else{
-        return this.default(resource);
+  // if the args are an object and it has a property called mappers
+  // treat it like an aggregate mapper else like a filter mapper
+  if (args.mappers){
+    return new AggregateMapper(args);
+  } else if (args.exec){
+    return new FilterMapper(args);
+  } else { // treat this like an object mapping of  {"filter" : {mapping attributes}}
+    let mappers = [];
+    for (var filter in args){
+      let mapper = args[filter];
+      if (typeof mapper === 'string'){
+        mappers.push(require(mapper));
+      } else if (typeof mapper === 'object' && !mapper.constructor.name === 'Object'){
+        mappers.push(mapper);
+      } else {
+        if (!mapper.filter){ mapper.filter = filter;}
+        if (!mapper.description){mapper.description = filter;}
+        mappers.push(buildMappers(mapper));
       }
     }
+    return mappers;
   }
-}
+};
 
-class ResourceTypeMapper {
+// Class to contain other mappers in a heirachy.  In oder for the contained
+// mappers to be executed they the filter would have to match for the containing
+// mapper.  This class can contain other aggregate mappers.
+class AggregateMapper {
 
   constructor(args){
+    this.args = args;
+    this.filterFn = buildFilter(args.filter);
     this.defaultFn = buildProcessor(args.default);
     this.ignoreFn = buildFilter(args.ignore);
     this.excludeFn = buildFilter(args.exclude);
-    this.mappers = buildFilterMappers(args.mappers);
+    this.mappers = buildMappers(args.mappers);
   }
 
   ignore(resource){
-    return this.ignoreFn ? this.ignoreFn(resource) : false
+    return this.ignoreFn ? this.ignoreFn(resource) : false;
   }
 
   exclude(resource){
-    return this.excludeFn ? this.excludeFn(resource) : false
+    return this.excludeFn ? this.excludeFn(resource) : false;
   }
 
   default(resource){
     return this.defaultFn ? this.defaultFn(resource) : resource;
   }
 
+  filter(resource){
+    return (this.filterFn) ? this.filterFn(resource) : false;
+  }
+
   execute(resource){
-    if(Array.isArray(resource)){
-      return resource.map( r => this.execute(r)).filter(n => n)
-    }else{
-      if(this.ignore(resource)){return resource};
-      if(this.exclude(resource)){return null;};
+    if (Array.isArray(resource)){
+      return resource.map( r => this.execute(r)).filter(n => n);
+    } else {
+      if (this.ignore(resource) || !this.filter(resource)){return resource;}
+      if (this.exclude(resource)){return null;}
       let mapper = this.mappers.find(map => map.filter(resource));
-      if(mapper){
+      if (mapper){
         return mapper.execute(resource);
-      }else{
+      } else {
         return this.default(resource);
       }
     }
   }
 }
 
+// Mapper that does the actual work of modifying a reasource.  These are the leaf
+// nodes of aggregate mappers.  The class contains a filter that must be matched by the
+// aggregate mapper and an exec function that will modify the resource.
 class FilterMapper {
 
   constructor(args){
@@ -167,16 +154,15 @@ class FilterMapper {
   }
 
   execute(resource){
-    if(Array.isArray(resource)){
-      return resource.map( r => this.execute(r)).filter(n => n)
+    if (Array.isArray(resource)){
+      return resource.map( r => this.execute(r)).filter(n => n);
     }
     return this.execfn(resource);
   }
 }
 
 module.exports = {
-  MappingEngine,
-  ResourceTypeMapper,
+  AggregateMapper,
   FilterMapper,
   buildFilter
-}
+};
