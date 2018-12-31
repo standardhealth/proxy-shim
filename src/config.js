@@ -2,7 +2,8 @@ const { VERSIONS, RESOURCES } = require('@asymmetrik/node-fhir-server-core').con
 const env = require('var');
 
 const PassThroughService = require('./utils/passthrough.service');
-
+const mapping = require('./mapping/mapper');
+const mappingService = mapping.buildMappers(require('./mapping.config'));
 
 // Set up whitelist
 let whitelist_env = env.WHITELIST && env.WHITELIST.split(',').map(host => host.trim()) || false;
@@ -31,7 +32,7 @@ let supportedResources = [RESOURCES.ACCOUNT,
 let profiles = {};
 for (var i in supportedResources){
   let profile = supportedResources[i];
-  profiles[profile] = { service: new PassThroughService(profile),
+  profiles[profile] = { service: new PassThroughService(profile, mappingService),
                   versions: [ VERSIONS['3_0_1'] ]};
 }
 

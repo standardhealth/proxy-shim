@@ -11,7 +11,8 @@ const {
 
 module.exports = class PassThroughService {
 
-  constructor(resourceType) {
+  constructor(resourceType, mappingService) {
+    this.mappingService = mappingService;
     this.resourceType = resourceType;
     let getResource = (base_version) => {
       return require(FHIRServer.resolveFromVersion(base_version, resourceType));
@@ -20,7 +21,12 @@ module.exports = class PassThroughService {
   }
 
 
-
+  mapResource(resource){
+    if (this.mappingService && this.mappingService.execute){
+      return this.mappingService.execute(resource);
+    }
+    return resource;
+  }
   search(args, context, logger) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
@@ -42,7 +48,7 @@ module.exports = class PassThroughService {
           resourceList.forEach(function(element, i, returnArray) {
             returnArray[i] = new Resource(element);
           });
-          resolve(resourceList);
+          resolve(this.mapResource(resourceList));
         }).catch(reject);
 
     });
@@ -66,7 +72,7 @@ module.exports = class PassThroughService {
           if (!response.meta) {
             response.meta = {};
           }
-          resolve(response);
+          resolve(this.mapResource(response));
         }).catch(reject);
 
     });
