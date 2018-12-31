@@ -10,8 +10,8 @@ let main = function () {
 	let server = FHIRServer.initialize(fhirServerConfig);
 	server.logger.info('FHIR Server successfully validated.');
 	// Start our server
-	server.listen(3090, () =>
-		server.logger.info('FHIR Server listening on localhost:' + 3090)
+	server.listen(3001, () =>
+		server.logger.info('FHIR Server listening on localhost:' + 3001)
 	);
 };
 
