@@ -5,15 +5,15 @@ const PassThroughService = require('./utils/passthrough.service');
 const mapping = require('./mapping/mapper');
 const mappingService = mapping.buildMappers(require('./mapping.config'));
 
-// Set up whitelist
-let whitelist_env = env.WHITELIST && env.WHITELIST.split(',').map(host => host.trim()) || false;
-
-// If no whitelist is present, disable cors
-// If it's length is 1, set it to a string, so * works
-// If there are multiple, keep them as an array
-let whitelist = whitelist_env && whitelist_env.length === 1
-	? whitelist_env[0]
-	: whitelist_env;
+// // Set up whitelist
+// let whitelist_env = env.WHITELIST && env.WHITELIST.split(',').map(host => host.trim()) || false;
+//
+// // If no whitelist is present, disable cors
+// // If it's length is 1, set it to a string, so * works
+// // If there are multiple, keep them as an array
+// let whitelist = whitelist_env && whitelist_env.length === 1
+// 	? whitelist_env[0]
+// 	: whitelist_env;
 
 
 let supportedResources = [RESOURCES.ACCOUNT,
@@ -61,7 +61,7 @@ let fhirServerConfig = {
 		// allow Access-Control-Allow-Origin
 		corsOptions: {
 			maxAge: 86400,
-			origin: ['*','http://mm221745-pc.mitre.org:3000']
+			origin: ['*', 'http://mm221745-pc.mitre.org:3000']
 		}
 	},
 	logging: {

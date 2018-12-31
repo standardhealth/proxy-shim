@@ -30,6 +30,7 @@ module.exports = class PassThroughService {
   }
   search(args, context, logger) {
     return new Promise((resolve, reject) => {
+      logger.info(this.resourceType + ' >>> search');
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
@@ -57,7 +58,6 @@ module.exports = class PassThroughService {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> searchById');
       let {
-        base_version,
         id
       } = args;
       let options = {
