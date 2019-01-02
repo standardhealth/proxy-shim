@@ -180,5 +180,6 @@ class FilterMapper {
 module.exports = {
   AggregateMapper,
   FilterMapper,
-  buildFilter
+  buildFilter,
+  buildMappers
 };
