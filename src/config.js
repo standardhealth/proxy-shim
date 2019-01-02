@@ -1,7 +1,7 @@
 const { VERSIONS, RESOURCES } = require('@asymmetrik/node-fhir-server-core').constants;
 const env = require('var');
 
-const PassThroughService = require('./utils/passthrough.service')
+const PassThroughService = require('./utils/passthrough.service');
 
 
 // Set up whitelist
@@ -29,10 +29,10 @@ let supportedResources = [RESOURCES.ACCOUNT,
                           RESOURCES.ENCOUNTER,
                           RESOURCES.MEDICATIONREQUEST];
 let profiles = {};
-for(var i in supportedResources){
+for (var i in supportedResources){
   let profile = supportedResources[i];
   profiles[profile] = { service: new PassThroughService(profile),
-                  versions: [ VERSIONS['3_0_1'] ]}
+                  versions: [ VERSIONS['3_0_1'] ]};
 }
 
 

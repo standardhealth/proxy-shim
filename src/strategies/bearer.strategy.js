@@ -13,8 +13,8 @@ const env = require('var');
  */
 module.exports.strategy = new Strategy(
     function(token, done) {
-    if(!token){
-      return done(new Error('Null token provided for authentication'))
+    if (!token){
+      return done(new Error('Null token provided for authentication'));
     }
 
     // If there isn't an introspection url provide a local means
@@ -22,9 +22,9 @@ module.exports.strategy = new Strategy(
     // available to the services
     if (!env.INTROSPECTION_URL) {
       let context = {token};
-      let scope = 'patient/*.read';
-      let user = {scope,context};
-			return done(null, user,{scope, context});
+      let scope = 'patient/*.read, procedure/*.read, condition/*.read, organization/*.read';
+      let user = {scope, context};
+			return done(null, user, {scope, context});
 		}
 
     // CLIENT_ID and CLIENT_SECRET must match those of the client that this
