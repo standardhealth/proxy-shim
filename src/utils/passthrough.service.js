@@ -20,7 +20,10 @@ module.exports = class PassThroughService {
     this.getResource = getResource;
   }
 
-
+  /* If the instance of this class has a mappingService configured this method
+     will call the mapping service to map the passed in resource to return to the
+     calling client
+  */
   mapResource(resource){
     if (this.mappingService && this.mappingService.execute){
       return this.mappingService.execute(resource);
@@ -28,6 +31,8 @@ module.exports = class PassThroughService {
     return resource;
   }
 
+  /* Implements the generic search operation for the configured resourceType
+  */
   search(args, context, logger) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
@@ -54,7 +59,8 @@ module.exports = class PassThroughService {
 
     });
   }
-
+  /* Implements the  search by id operation for the configured resourceType
+  */
   searchById(args, context, logger) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> searchById');
@@ -83,7 +89,7 @@ module.exports = class PassThroughService {
     });
   }
 
-
+ // Methods below are not currently implemented
   searchByVersionId(args, context, logger) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> searchByVersionId');
