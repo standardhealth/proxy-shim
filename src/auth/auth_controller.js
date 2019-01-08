@@ -44,8 +44,8 @@ let build = function(server) {
   router.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true })); // for parsing application/x-www-form-urlencoded
 
   router.get('/authorize', cors(default_cors_options), function (req, res) {
+    console.log('AUTHORIZE CALLED');
     var fhirClient = mkFhir(options);
-
     fhirClient.conformance(fhirClientConfig).then((response) => {
       let uris = authUris(response);
       let params = req.query;
@@ -55,7 +55,7 @@ let build = function(server) {
            pathname: uris.authorize,
            query: params
          }));
-    });
+    }).catch((error) => {throw error;});
   });
 
 

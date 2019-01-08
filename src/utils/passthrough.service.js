@@ -1,9 +1,8 @@
 const FHIRServer = require('@asymmetrik/node-fhir-server-core');
-var mkFhir = require('fhir.js');
+const mkFhir = require('fhir.js');
+const config = require('config');
 
-const {
-  fhirClientConfig
-} = require('../client.config');
+const fhirClientConfig = config.fhirClientConfig;
 
 const {
   bundleToResourceList
