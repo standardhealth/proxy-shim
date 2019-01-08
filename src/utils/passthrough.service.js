@@ -37,6 +37,7 @@ module.exports = class PassThroughService {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
       const base_version = args.base_version;
+      delete args.base_version;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {

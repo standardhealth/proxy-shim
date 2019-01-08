@@ -22,7 +22,7 @@ module.exports.strategy = new Strategy(
     // available to the services
     if (!env.INTROSPECTION_URL) {
       let context = {token};
-      let scope = 'patient/*.read, procedure/*.read, condition/*.read, organization/*.read';
+      let scope = 'patient/*.read, user/*.read';
       let user = {scope, context};
 			return done(null, user, {scope, context});
 		}
