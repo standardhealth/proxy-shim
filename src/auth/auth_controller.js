@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 const request = require('request');
 var mkFhir = require('fhir.js');
 const config = require('config');
-console.log(config);
 const fhirClientConfig = config.fhirClientConfig;
 const options = {
     baseUrl: fhirClientConfig.baseUrl

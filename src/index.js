@@ -14,6 +14,7 @@ let main = function () {
 
 	let server = new FHIRServer.Server(fhirServerConfig);
   let port = fhirServerConfig.server.port;
+  // add the auth component to the server application
   server.app.use('/auth', auth(server) );
   server.configureMiddleware()
 		.configureSession()
