@@ -12366,10 +12366,10 @@ module.exports = {
         'url': 'http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris',
         'extension': [{
           'url': 'authorize',
-          'valueUri': 'http://moonshot-dev.mitre.org:4001/v/r2/auth/authorize'
+          'valueUri': 'http://localhost:4001/v/r2/auth/authorize'
         }, {
           'url': 'token',
-          'valueUri': 'http://moonshot-dev.mitre.org:4001/v/r2/auth/token'
+          'valueUri': 'http://localhost:4001/v/r2/auth/token'
         }]
       }]
     }

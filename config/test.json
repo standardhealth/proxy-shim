@@ -1,0 +1,6 @@
+{
+  "fhirClientConfig" :{
+    "baseUrl": "http://localhost:4001/v/r2",
+    "debug": false
+  }
+}

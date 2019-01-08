@@ -5,7 +5,7 @@ const auth = require('./auth/auth_controller');
 // FHIRServer initialize routine modifies the config structure and will fail to
 // start if it cannot modify the structure
 process.env.ALLOW_CONFIG_MUTATIONS = true;
-process.env.NODE_CONFIG_DIR = __dirname + '/config/';
+
 const config = require('config');
 
 const fhirServerConfig = config.get('fhirServerConfig');

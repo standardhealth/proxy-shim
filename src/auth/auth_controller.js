@@ -4,8 +4,9 @@ const url = require('url');
 var bodyParser = require('body-parser');
 const request = require('request');
 var mkFhir = require('fhir.js');
-
-const {fhirClientConfig} = require('../client.config');
+const config = require('config');
+console.log(config);
+const fhirClientConfig = config.fhirClientConfig;
 const options = {
     baseUrl: fhirClientConfig.baseUrl
 };
@@ -55,7 +56,9 @@ let build = function(server) {
            pathname: uris.authorize,
            query: params
          }));
-    }).catch((error) => {throw error;});
+    }).catch((error) => {
+      console.log(error);
+      throw error;});
   });
 
 

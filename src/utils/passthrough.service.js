@@ -27,9 +27,11 @@ module.exports = class PassThroughService {
     }
     return resource;
   }
+
   search(args, context, logger) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
+      const base_version = args.base_version;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
@@ -43,7 +45,7 @@ module.exports = class PassThroughService {
         })
         .then((response) => {
           let Resource = this.getResource(base_version);
-          let resourceList = bundleToResourceList(response);
+          let resourceList = bundleToResourceList(response.data);
           resourceList.forEach(function(element, i, returnArray) {
             returnArray[i] = new Resource(element);
           });
@@ -75,7 +77,7 @@ module.exports = class PassThroughService {
           if (!data.meta) {
             data.meta = {};
           }
-          resolve(this.mapResource(response));
+          resolve(this.mapResource(data));
         }).catch(reject);
 
     });

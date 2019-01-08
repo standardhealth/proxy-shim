@@ -8,11 +8,11 @@ describe('loading express', function() {
   let server;
   beforeEach(() => {
     server = require('../../src/index');
-    nock('http://moonshot-dev.mitre.org:4001')
+    nock('http://localhost:4001')
       .get('/v/r2/metadata')
       .reply(200, metadata);
 
-    nock('http://moonshot-dev.mitre.org:4001')
+    nock('http://localhost:4001')
       .post('/v/r2/auth/token')
       .reply(200, token);
   });
@@ -30,6 +30,6 @@ describe('loading express', function() {
   it('responds to token url', function testPath(done) {
     request(server)
       .post('/auth/token')
-      .expect(404, done);
+      .expect(200, done);
   });
 });
