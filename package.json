@@ -11,7 +11,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production; node src/index.js;",
     "nodemon": "cross-env NODE_ENV=development; node scripts/nodemon;",
-    "test": "yarn test:lint && yarn test:jest",
+    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test yarn test:lint && yarn test:jest --detectOpenHandles",
     "test:lint": "eslint \"src/**/*.js\"",
     "test:jest": "jest --forceExit"
   },
@@ -30,20 +30,21 @@
   },
   "dependencies": {
     "@asymmetrik/node-fhir-server-core": "git+https://github.com/Asymmetrik/node-fhir-server-core.git",
+    "fhirpath": "0.10.1",
     "moment-timezone": "^0.5.14",
+    "underscore": "1.9.1",
     "var": "^0.3.2",
-    "fhir-kit-client": "",
-    "fhirpath" : "",
-    "underscore" : ""
-
+    "config" : "3.0.1",
+    "fhir.js":"git+https://github.com/FHIR/fhir.js.git"
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
     "eslint": "^4.14.0",
     "jest": "^23.5.0",
     "nodemon": "^1.18.3",
-    "rewire" : ""
-
+    "rewire": "4.0.1",
+    "supertest" : "3.3.0",
+    "nock" : "10.0.6"
   },
   "private": false
 }

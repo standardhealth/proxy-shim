@@ -38,6 +38,6 @@ module.export = {
      default: (resource) => setProfile(resource, '')
    }
 
- }
+}
 
 };
