@@ -3,45 +3,13 @@ const {
   RESOURCES
 } = require('@asymmetrik/node-fhir-server-core').constants;
 
-// // Set up whitelist
-// let whitelist_env = env.WHITELIST && env.WHITELIST.split(',').map(host => host.trim()) || false;
-//
-// // If no whitelist is present, disable cors
-// // If it's length is 1, set it to a string, so * works
-// // If there are multiple, keep them as an array
-// let whitelist = whitelist_env && whitelist_env.length === 1
-// 	? whitelist_env[0]
-// 	: whitelist_env;
-
-//
-// let supportedResources = [RESOURCES.ACCOUNT,
-//                           RESOURCES.PATIENT,
-//                           RESOURCES.OBSERVATION,
-//                           RESOURCES.MEDICATIONSTATEMENT,
-//                           RESOURCES.ADVERSEEVENT,
-//                           RESOURCES.ALLERGYINTOLERANCE,
-//                           RESOURCES.IMMUNIZATION,
-//                           RESOURCES.MEDICATIONADMINISTRATION,
-//                           RESOURCES.CONDITION,
-//                           RESOURCES.DEVICE,
-//                           RESOURCES.PROCEDURE,
-//                           RESOURCES.PRACTITIONER,
-//                           RESOURCES.ENCOUNTER,
-//                           RESOURCES.MEDICATIONREQUEST];
-// let profiles = {};
-// for (var i in supportedResources){
-//   let profile = supportedResources[i];
-//   profiles[profile] = { service: new PassThroughService(profile),
-//                         versions: [ VERSIONS['3_0_1'] ]};
-// }
-
 
 let fhirClientConfig = {
   baseUrl: 'http://localhost',
   debug: true
 };
 
-/**c
+/**
  * @name fhirServerConfig
  * @summary @asymmetrik/node-fhir-server-core configurations.
  */
@@ -64,7 +32,7 @@ let fhirServerConfig = {
     // allow Access-Control-Allow-Origin
     corsOptions: {
       maxAge: 86400,
-      origin: ['*', 'http://mm221745-pc.mitre.org:3000']
+      origin: ['*']
     }
   },
   logging: {
