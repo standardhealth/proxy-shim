@@ -1,6 +1,7 @@
 {
   "fhirClientConfig" :{
     "baseUrl": "http://localhost:4001/v/r2",
-    "debug": false
+    "debug": false,
+    "patientEverythingResources": ["Condition","Observation"]
   }
 }

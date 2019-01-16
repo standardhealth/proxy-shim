@@ -7,7 +7,12 @@ let bundleToResourceList = (bundle) => {
   return bundle.entry.map(i => i.resource);
 };
 
+let isBundle = (bundle) => {
+  return (bundle && bundle.resourceType === 'Bundle');
+};
+
 
 module.exports = {
-  bundleToResourceList
+  bundleToResourceList,
+  isBundle
 };

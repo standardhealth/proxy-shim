@@ -74,7 +74,12 @@ let fhirServerConfig = {
 
     [RESOURCES.PATIENT]: {
       service: './src/services/patient.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      operation: [
+        { name: 'everything',
+         route: '/id:/$everything',
+          method: 'GET'}
+        ]
     },
 
     // [RESOURCES.ADVERSEEVENT]: {
