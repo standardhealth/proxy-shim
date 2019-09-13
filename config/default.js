@@ -1,4 +1,5 @@
 const { constants } = require('@asymmetrik/node-fhir-server-core');
+const raw = require('config/raw').raw;
 const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
@@ -6,11 +7,10 @@ let fhirClientConfig = {
   debug: true
 };
 
-/**
- * @name fhirServerConfig
- * @summary @asymmetrik/node-fhir-server-core configurations.
- */
-let fhirServerConfig = {
+// note this has to be raw()-ified to prevent config from adding helper functions in config.profiles (has, get)
+// since those helper functions cause errors in the fhir server configuration
+// (ie, they get validated as if they were profiles, which they are not)
+let fhirServerConfig = raw({
   auth: {
     // This servers URI
     resourceServer: 'http://localhost:3001',
@@ -144,7 +144,7 @@ let fhirServerConfig = {
     },
 
   }
-};
+});
 
 module.exports = {
   fhirServerConfig,

@@ -8,16 +8,11 @@ process.env.ALLOW_CONFIG_MUTATIONS = true;
 
 const config = require('config');
 
-let fhirServerConfig = config.get('fhirServerConfig');
-// TODO: resolve incompatibilities between node-config and asymmetrik fhir
-// node-config adds ["get","has","util"] to config object prototypes
-// which causes an error to be thrown in fhir server config profile validation
-// (because config['has'] is missing things that a correctly configured profile would have)
-fhirServerConfig = JSON.parse(JSON.stringify(fhirServerConfig));
+const fhirServerConfig = config.get('fhirServerConfig').resolve();
 
 const main = function () {
 
-	const server = new Server(fhirServerConfig);
+  const server = new Server(fhirServerConfig);
   const port = fhirServerConfig.server.port;
   // add the auth component to the server application
   server.app.use('/auth', auth(server) );
