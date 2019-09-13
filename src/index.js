@@ -4,7 +4,7 @@ const auth = require('./auth/auth_controller');
 // the config object is immutable by default.  This causes a problem because hte
 // FHIRServer initialize routine modifies the config structure and will fail to
 // start if it cannot modify the structure
-process.env.ALLOW_CONFIG_MUTATIONS = false;
+process.env.ALLOW_CONFIG_MUTATIONS = true;
 
 const config = require('config');
 
