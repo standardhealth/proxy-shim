@@ -34,7 +34,6 @@ module.exports = class PassThroughService {
   search(args, context) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
-      const base_version = args.base_version;
       delete args.base_version;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
@@ -83,42 +82,42 @@ module.exports = class PassThroughService {
   }
 
  // Methods below are not currently implemented
-  searchByVersionId(args, context) {
+  searchByVersionId(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> searchByVersionId');
       resolve();
     });
   }
 
-  create(args, context) {
+  create(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> create');
       resolve();
     });
   }
 
-  update(args, context) {
+  update(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> update');
       resolve();
     });
   }
 
-  remove(args, context) {
+  remove(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> delete');
       resolve();
     });
   }
 
-  history(args, context) {
+  history(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> history');
       resolve();
     });
   }
 
-  historyById(args, context) {
+  historyById(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> historyById');
       resolve();
