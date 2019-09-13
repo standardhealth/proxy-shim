@@ -14,9 +14,6 @@ let fhirServerConfig = {
   auth: {
     // This servers URI
     resourceServer: 'http://localhost:3001',
-    //
-    // if you use this strategy, you need to add the corresponding env vars to docker-compose
-    //
     strategy: {
       name: 'bearer',
       useSession: false,
@@ -29,7 +26,7 @@ let fhirServerConfig = {
     // allow Access-Control-Allow-Origin
     corsOptions: {
       maxAge: 86400,
-      origin: ['*']
+      origin: '*'
     }
   },
   logging: {
@@ -121,10 +118,11 @@ let fhirServerConfig = {
       service: './src/services/medicationrequest.service',
       versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']]
     },
-    // ['MedicationOrder']: {
-    //   service: './src/services/medicationrequest.service.js',
-    //   versions: [VERSIONS['1_0_2']]
-    // },
+    'MedicationOrder': {
+      service: './src/services/medicationorder.service',
+      versions: [VERSIONS['1_0_2']]
+    },
+    
     'MedicationStatement': {
       service: './src/services/medicationstatement.service',
       versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]

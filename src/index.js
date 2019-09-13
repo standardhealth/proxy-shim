@@ -1,10 +1,10 @@
-const { initialize, loggers } = require('@asymmetrik/node-fhir-server-core');
+const { Server, loggers } = require('@asymmetrik/node-fhir-server-core');
 const logger = loggers.get('default');
 const auth = require('./auth/auth_controller');
 // the config object is immutable by default.  This causes a problem because hte
 // FHIRServer initialize routine modifies the config structure and will fail to
 // start if it cannot modify the structure
-// process.env.ALLOW_CONFIG_MUTATIONS = false;
+process.env.ALLOW_CONFIG_MUTATIONS = false;
 
 const config = require('config');
 
@@ -17,7 +17,7 @@ fhirServerConfig = JSON.parse(JSON.stringify(fhirServerConfig));
 
 const main = function () {
 
-	const server = initialize(fhirServerConfig);
+	const server = new Server(fhirServerConfig);
   const port = fhirServerConfig.server.port;
   // add the auth component to the server application
   server.app.use('/auth', auth(server) );

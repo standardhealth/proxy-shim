@@ -1,10 +1,11 @@
-const { resolveFromVersion, loggers } = require('@asymmetrik/node-fhir-server-core');
+const { resolveSchema, loggers } = require('@asymmetrik/node-fhir-server-core');
 const mkFhir = require('fhir.js');
 const config = require('config');
-const { bundleToResourceList } = require('./response.utils');
 
 const logger = loggers.get('default');
 const fhirClientConfig = config.fhirClientConfig;
+
+const getToken = (context) => context.req.user.context.token;
 
 module.exports = class PassThroughService {
 
@@ -12,7 +13,7 @@ module.exports = class PassThroughService {
     this.mappingService = mappingService;
     this.resourceType = resourceType;
     let getResource = (base_version) => {
-      return require(resolveFromVersion(base_version, resourceType));
+      return require(resolveSchema(base_version, resourceType));
     };
     this.getResource = getResource;
   }
@@ -38,7 +39,7 @@ module.exports = class PassThroughService {
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
-          bearer: context.token
+          bearer: getToken(context)
         }
       };
       var fhirClient = mkFhir(options);
@@ -46,14 +47,8 @@ module.exports = class PassThroughService {
           type: this.resourceType,
           query: args
         })
-        .then((response) => {
-          let Resource = this.getResource(base_version);
-          let resourceList = bundleToResourceList(response.data);
-          resourceList.forEach(function(element, i, returnArray) {
-            returnArray[i] = new Resource(element);
-          });
-          resolve(this.mapResource(resourceList));
-        }).catch(reject);
+        .then((response) => resolve(this.mapResource(response.data)))
+        .catch(reject);
 
     });
   }
@@ -68,7 +63,7 @@ module.exports = class PassThroughService {
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
-          bearer: context.token
+          bearer: getToken(context)
         }
       };
       var fhirClient = mkFhir(options);
