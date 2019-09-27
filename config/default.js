@@ -1,25 +1,19 @@
-const {
-  VERSIONS,
-  RESOURCES
-} = require('@asymmetrik/node-fhir-server-core').constants;
-
+const { constants } = require('@asymmetrik/node-fhir-server-core');
+const raw = require('config/raw').raw;
+const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
   baseUrl: 'http://localhost',
   debug: true
 };
 
-/**
- * @name fhirServerConfig
- * @summary @asymmetrik/node-fhir-server-core configurations.
- */
-let fhirServerConfig = {
+// note this has to be raw()-ified to prevent config from adding helper functions in config.profiles (has, get)
+// since those helper functions cause errors in the fhir server configuration
+// (ie, they get validated as if they were profiles, which they are not)
+let fhirServerConfig = raw({
   auth: {
     // This servers URI
     resourceServer: 'http://localhost:3001',
-    //
-    // if you use this strategy, you need to add the corresponding env vars to docker-compose
-    //
     strategy: {
       name: 'bearer',
       useSession: false,
@@ -32,7 +26,7 @@ let fhirServerConfig = {
     // allow Access-Control-Allow-Origin
     corsOptions: {
       maxAge: 86400,
-      origin: ['*']
+      origin: '*'
     }
   },
   logging: {
@@ -72,84 +66,85 @@ let fhirServerConfig = {
   // }
   profiles: {
 
-    [RESOURCES.PATIENT]: {
-      service: './src/services/patient.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Patient': {
+      service: './src/services/patient.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    // [RESOURCES.ADVERSEEVENT]: {
+    // 'AdverseEvent': {
     //   service: './src/services/adverseevent.service.js',
-    //   versions: [VERSIONS['3_0_1']
+    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']
     // },
-    [RESOURCES.ALLERGYINTOLERANCE]: {
-      service: './src/services/allergyintolerance.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'AllergyIntolerance': {
+      service: './src/services/allergyintolerance.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    // [RESOURCES.CAREPLAN]: {
+    // 'CarePlan': {
     // 	service: './src/services/careplan.service.js',
-    // 	versions: [ VERSIONS['3_0_1'] ]
+    // 	versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'] ]
     // },
-    [RESOURCES.CONDITION]: {
-      service: './src/services/condition.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Condition': {
+      service: './src/services/condition.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.DEVICE]: {
-      service: './src/services/device.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Device': {
+      service: './src/services/device.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.ENCOUNTER]: {
-      service: './src/services/encounter.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Encounter': {
+      service: './src/services/encounter.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    // [RESOURCES.GOAL]: {
+    // 'Goal': {
     //   service: './src/services/goal.service.js',
-    //   versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     // },
 
-    [RESOURCES.IMMUNIZATION]: {
-      service: './src/services/immunization.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Immunization': {
+      service: './src/services/immunization.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.MEDICATIONADMINISTRATION]: {
-      service: './src/services/medicationadministration.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'MedicationAdministration': {
+      service: './src/services/medicationadministration.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.MEDICATIONREQUEST]: {
-      service: './src/services/medicationrequest.service.js',
-      versions: [VERSIONS['3_0_1']]
+    'MedicationRequest': {
+      service: './src/services/medicationrequest.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']]
     },
-    // ['MedicationOrder']: {
-    //   service: './src/services/medicationrequest.service.js',
-    //   versions: [VERSIONS['1_0_2']]
-    // },
-    [RESOURCES.MEDICATIONSTATEMENT]: {
-      service: './src/services/medicationstatement.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'MedicationOrder': {
+      service: './src/services/medicationorder.service',
+      versions: [VERSIONS['1_0_2']]
     },
-
-    [RESOURCES.OBSERVATION]: {
-      service: './src/services/observation.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    
+    'MedicationStatement': {
+      service: './src/services/medicationstatement.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.PRACTITIONER]: {
-      service: './src/services/practitioner.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Observation': {
+      service: './src/services/observation.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
-    [RESOURCES.PROCEDURE]: {
-      service: './src/services/procedure.service.js',
-      versions: [VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    'Practitioner': {
+      service: './src/services/practitioner.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+    },
+
+    'Procedure': {
+      service: './src/services/procedure.service',
+      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
     },
 
   }
-};
+});
 
 module.exports = {
   fhirServerConfig,

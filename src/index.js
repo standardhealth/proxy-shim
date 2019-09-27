@@ -1,5 +1,5 @@
-const FHIRServer = require('@asymmetrik/node-fhir-server-core');
-
+const { Server, loggers } = require('@asymmetrik/node-fhir-server-core');
+const logger = loggers.get('default');
 const auth = require('./auth/auth_controller');
 // the config object is immutable by default.  This causes a problem because hte
 // FHIRServer initialize routine modifies the config structure and will fail to
@@ -8,12 +8,12 @@ process.env.ALLOW_CONFIG_MUTATIONS = true;
 
 const config = require('config');
 
-const fhirServerConfig = config.get('fhirServerConfig');
+const fhirServerConfig = config.get('fhirServerConfig').resolve();
 
-let main = function () {
+const main = function () {
 
-	let server = new FHIRServer.Server(fhirServerConfig);
-  let port = fhirServerConfig.server.port;
+  const server = new Server(fhirServerConfig);
+  const port = fhirServerConfig.server.port;
   // add the auth component to the server application
   server.app.use('/auth', auth(server) );
   server.configureMiddleware()
@@ -23,11 +23,10 @@ let main = function () {
 		.setPublicDirectory()
 		.setProfileRoutes()
 		.setErrorRoutes();
-  //console.log(server.app._router.stack);
-	server.logger.info('FHIR Server successfully validated.');
+	logger.info('FHIR Server successfully validated.');
 	// Start our server
 	server.listen(port, () =>
-		server.logger.info('FHIR Server listening on localhost:' + port)
+		logger.info('FHIR Server listening on localhost:' + port)
 
 	);
   return server.app;
