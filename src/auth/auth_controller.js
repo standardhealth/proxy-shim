@@ -1,13 +1,13 @@
-const express = require("express");
-const cors = require("cors");
-const url = require("url");
-const bodyParser = require("body-parser");
-const request = require("request");
-const mkFhir = require("fhir.js");
-const config = require("config");
+const express = require('express');
+const cors = require('cors');
+const url = require('url');
+const bodyParser = require('body-parser');
+const request = require('request');
+const mkFhir = require('fhir.js');
+const config = require('config');
 const fhirClientConfig = config.fhirClientConfig;
 const options = {
-  baseUrl: fhirClientConfig.baseUrl
+  baseUrl: fhirClientConfig.baseUrl,
 };
 
 /*
@@ -15,7 +15,7 @@ const options = {
 */
 var rawBodySaver = function (req, res, buf, encoding) {
   if (buf && buf.length) {
-    req.rawBody = buf.toString(encoding || "utf8");
+    req.rawBody = buf.toString(encoding || 'utf8');
   }
 };
 
@@ -25,13 +25,10 @@ var rawBodySaver = function (req, res, buf, encoding) {
 var authUris = function (response) {
   for (var x in response.data.rest) {
     var entry = response.data.rest[x];
-    if (entry.mode === "server") {
+    if (entry.mode === 'server') {
       for (let i in entry.security.extension) {
         let ex = entry.security.extension[i];
-        if (
-          ex.url ===
-          "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris"
-        ) {
+        if (ex.url === 'http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris') {
           var uris = {};
           for (let j in ex.extension) {
             let uri = ex.extension[j];
@@ -48,10 +45,7 @@ var authUris = function (response) {
 let build = function (server) {
   let router = new express.Router();
 
-  let default_cors_options = Object.assign(
-    {},
-    server.config.server.corsOptions
-  );
+  let default_cors_options = Object.assign({}, server.config.server.corsOptions);
   // this is the redirection for the
   router.use(bodyParser.json()); // for parsing application/json
   router.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true })); // for parsing application/x-www-form-urlencoded
@@ -82,21 +76,18 @@ let build = function (server) {
   fhirClient.  The response from the proxied call is then used as the response for
   the initial request
   */
-  router.post("/token", cors(default_cors_options), function (req, res) {
+  router.post('/token', cors(default_cors_options), function (req, res) {
     var fhirClient = mkFhir({
-      baseUrl: fhirClientConfig.baseUrl
+      baseUrl: fhirClientConfig.baseUrl,
     });
     fhirClient.conformance(fhirClientConfig).then((response) => {
       let uris = authUris(response);
-      request.post(
-        { url: uris.token, form: req.body },
-        (err, httpResponse, body) => {
-          if (err) {
-            console.log(err);
-          }
-          res.status(httpResponse.statusCode).send(body);
+      request.post({ url: uris.token, form: req.body }, (err, httpResponse, body) => {
+        if (err) {
+          console.log(err);
         }
-      );
+        res.status(httpResponse.statusCode).send(body);
+      });
     });
   });
   return router;
