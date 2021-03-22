@@ -15,7 +15,7 @@ yarn start
 
 With default settings, the app will now be running at `http://localhost:8080`
 
-The Backend Service Client can also be run using docker. Make sure you have docker installed and running, then build the image and run the client.
+The Subscription Proxy server can also be run using docker. Make sure you have docker installed and running, then build the image and run the server.
 
 ```./build-docker-image.bat
 docker-compose up

@@ -5,12 +5,7 @@ const config = require("config");
 const logger = loggers.get("default");
 const fhirClientConfig = config.fhirClientConfig;
 
-const getToken = (context) => {
-  console.log(context.req.headers.authorization.split("Bearer ")[1]);
-  console.log(context.req.user.context.token);
-  // return context.req.headers.authorization.split("Bearer ")[1];
-  return context.req.user.context.token;
-};
+const getToken = (context) => context.req.user.context.token;
 
 module.exports = class PassThroughService {
   constructor(resourceType, mappingService) {
