@@ -36,8 +36,8 @@
     "moment-timezone": "^0.5.14",
     "underscore": "1.9.1",
     "var": "^0.3.2",
-    "config" : "3.0.1",
-    "fhir.js":"git+https://github.com/FHIR/fhir.js.git"
+    "config": "3.0.1",
+    "fhir.js": "git+https://github.com/FHIR/fhir.js.git"
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
@@ -45,8 +45,8 @@
     "jest": "^23.5.0",
     "nodemon": "^1.18.3",
     "rewire": "4.0.1",
-    "supertest" : "3.3.0",
-    "nock" : "10.0.6"
+    "supertest": "3.3.0",
+    "nock": "10.0.6"
   },
   "private": false
 }
