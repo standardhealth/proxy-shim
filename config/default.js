@@ -13,7 +13,7 @@ let fhirClientConfig = {
 let fhirServerConfig = raw({
   auth: {
     // This servers URI
-    resourceServer: "http://localhost:8090",
+    resourceServer: "http://localhost:8180/fhir",
     strategy: {
       name: "bearer",
       useSession: false,
