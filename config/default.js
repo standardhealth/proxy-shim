@@ -3,7 +3,7 @@ const raw = require("config/raw").raw;
 const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
-  baseUrl: "http://localhost",
+  baseUrl: "http://pathways.mitre.org:8180/fhir",
   debug: true
 };
 
@@ -13,7 +13,7 @@ let fhirClientConfig = {
 let fhirServerConfig = raw({
   auth: {
     // This servers URI
-    resourceServer: "http://localhost:8180/fhir",
+    resourceServer: "http://localhost:8080",
     strategy: {
       name: "bearer",
       useSession: false,

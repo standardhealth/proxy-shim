@@ -31,22 +31,22 @@
   },
   "dependencies": {
     "@asymmetrik/node-fhir-server-core": "^2.0.4",
+    "config": "3.0.1",
     "fhir-mapper": "^2.0.0",
+    "fhir.js": "^0.0.22",
     "fhirpath": "0.10.1",
     "moment-timezone": "^0.5.14",
     "underscore": "1.9.1",
-    "var": "^0.3.2",
-    "config": "3.0.1",
-    "fhir.js": "git+https://github.com/FHIR/fhir.js.git"
+    "var": "^0.3.2"
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
     "eslint": "^4.14.0",
     "jest": "^23.5.0",
+    "nock": "10.0.6",
     "nodemon": "^1.18.3",
     "rewire": "4.0.1",
-    "supertest": "3.3.0",
-    "nock": "10.0.6"
+    "supertest": "3.3.0"
   },
   "private": false
 }

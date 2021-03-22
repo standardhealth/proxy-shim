@@ -1,14 +1,18 @@
-const { resolveSchema, loggers } = require('@asymmetrik/node-fhir-server-core');
-const mkFhir = require('fhir.js');
-const config = require('config');
+const { resolveSchema, loggers } = require("@asymmetrik/node-fhir-server-core");
+const mkFhir = require("fhir.js");
+const config = require("config");
 
-const logger = loggers.get('default');
+const logger = loggers.get("default");
 const fhirClientConfig = config.fhirClientConfig;
 
-const getToken = (context) => context.req.user.context.token;
+const getToken = (context) => {
+  console.log(context.req.headers.authorization.split("Bearer ")[1]);
+  console.log(context.req.user.context.token);
+  // return context.req.headers.authorization.split("Bearer ")[1];
+  return context.req.user.context.token;
+};
 
 module.exports = class PassThroughService {
-
   constructor(resourceType, mappingService) {
     this.mappingService = mappingService;
     this.resourceType = resourceType;
@@ -22,18 +26,18 @@ module.exports = class PassThroughService {
      will call the mapping service to map the passed in resource to return to the
      calling client
   */
-  mapResource(resource){
-    if (this.mappingService && this.mappingService.execute){
+  mapResource(resource) {
+    if (this.mappingService && this.mappingService.execute) {
       return this.mappingService.execute(resource);
     }
     return resource;
   }
 
   /* Implements the generic search operation for the configured resourceType
-  */
+   */
   search(args, context) {
     return new Promise((resolve, reject) => {
-      logger.info(this.resourceType + ' >>> search');
+      logger.info(this.resourceType + " >>> search");
       delete args.base_version;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
@@ -42,23 +46,21 @@ module.exports = class PassThroughService {
         }
       };
       var fhirClient = mkFhir(options);
-      fhirClient.search({
+      fhirClient
+        .search({
           type: this.resourceType,
           query: args
         })
         .then((response) => resolve(this.mapResource(response.data)))
         .catch(reject);
-
     });
   }
   /* Implements the  search by id operation for the configured resourceType
-  */
+   */
   searchById(args, context) {
     return new Promise((resolve, reject) => {
-      logger.info(this.resourceType + ' >>> searchById');
-      let {
-        id
-      } = args;
+      logger.info(this.resourceType + " >>> searchById");
+      let { id } = args;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
@@ -66,7 +68,8 @@ module.exports = class PassThroughService {
         }
       };
       var fhirClient = mkFhir(options);
-      fhirClient.read({
+      fhirClient
+        .read({
           type: this.resourceType,
           id: id
         })
@@ -76,50 +79,50 @@ module.exports = class PassThroughService {
             data.meta = {};
           }
           resolve(this.mapResource(data));
-        }).catch(reject);
-
+        })
+        .catch(reject);
     });
   }
 
- // Methods below are not currently implemented
+  // Methods below are not currently implemented
   searchByVersionId(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> searchByVersionId');
+      logger.info(this.resourceType + " >>> searchByVersionId");
       resolve();
     });
   }
 
   create(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> create');
+      logger.info(this.resourceType + " >>> create");
       resolve();
     });
   }
 
   update(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> update');
+      logger.info(this.resourceType + " >>> update");
       resolve();
     });
   }
 
   remove(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> delete');
+      logger.info(this.resourceType + " >>> delete");
       resolve();
     });
   }
 
   history(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> history');
+      logger.info(this.resourceType + " >>> history");
       resolve();
     });
   }
 
   historyById(_args, _context) {
     return new Promise((resolve, _reject) => {
-      logger.info(this.resourceType + ' >>> historyById');
+      logger.info(this.resourceType + " >>> historyById");
       resolve();
     });
   }

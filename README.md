@@ -23,6 +23,17 @@ docker-compose up
 
 The app will now be running at `http://localhost:8080`.
 
+## Config
+
+The default config can be found in `/config/default.js`. The important properties are:
+
+```
+fhirClientConfig.baseUrl: 'the actual EHR server full url'
+fhirServerConfig.auth.resourceServer: 'this server URI'
+fhirServerConfig.server.port: 'the port to run this server on'
+fhirServerConfig.security.valueUri: 'SMART Backend Auth token uri'
+```
+
 # License
 
 Copyright 2020 The MITRE Corporation
