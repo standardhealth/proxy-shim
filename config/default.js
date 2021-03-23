@@ -64,79 +64,62 @@ let fhirServerConfig = raw({
   profiles: {
     Patient: {
       service: './src/services/patient.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
-    // 'AdverseEvent': {
-    //   service: './src/services/adverseevent.service.js',
-    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']
-    // },
-    AllergyIntolerance: {
-      service: './src/services/allergyintolerance.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
-    },
-
-    // 'CarePlan': {
-    // 	service: './src/services/careplan.service.js',
-    // 	versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'] ]
-    // },
     Condition: {
       service: './src/services/condition.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
-    },
-
-    Device: {
-      service: './src/services/device.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     Encounter: {
       service: './src/services/encounter.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
-
-    // 'Goal': {
-    //   service: './src/services/goal.service.js',
-    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
-    // },
 
     Immunization: {
       service: './src/services/immunization.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
+    },
+
+    MedicationDispense: {
+      service: './src/services/medicationdispense.service',
+      versions: [VERSIONS['4_0_0']],
     },
 
     MedicationAdministration: {
       service: './src/services/medicationadministration.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     MedicationRequest: {
       service: './src/services/medicationrequest.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']],
-    },
-    MedicationOrder: {
-      service: './src/services/medicationorder.service',
-      versions: [VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     MedicationStatement: {
       service: './src/services/medicationstatement.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     Observation: {
       service: './src/services/observation.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     Practitioner: {
       service: './src/services/practitioner.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
     },
 
     Procedure: {
       service: './src/services/procedure.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']],
+      versions: [VERSIONS['4_0_0']],
+    },
+
+    ServiceRequest: {
+      service: './src/services/servicerequest.service',
+      versions: [VERSIONS['4_0_0']],
     },
   },
 });
