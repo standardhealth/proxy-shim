@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  subscription_proxy:
+    image: subscription_proxy
+    container_name: subscription_proxy
+    restart: on-failure
+    ports:
+      - "8080:8080"

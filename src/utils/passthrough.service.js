@@ -8,7 +8,6 @@ const fhirClientConfig = config.fhirClientConfig;
 const getToken = (context) => context.req.user.context.token;
 
 module.exports = class PassThroughService {
-
   constructor(resourceType, mappingService) {
     this.mappingService = mappingService;
     this.resourceType = resourceType;
@@ -22,15 +21,15 @@ module.exports = class PassThroughService {
      will call the mapping service to map the passed in resource to return to the
      calling client
   */
-  mapResource(resource){
-    if (this.mappingService && this.mappingService.execute){
+  mapResource(resource) {
+    if (this.mappingService && this.mappingService.execute) {
       return this.mappingService.execute(resource);
     }
     return resource;
   }
 
   /* Implements the generic search operation for the configured resourceType
-  */
+   */
   search(args, context) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> search');
@@ -38,37 +37,36 @@ module.exports = class PassThroughService {
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
-          bearer: getToken(context)
-        }
+          bearer: getToken(context),
+        },
       };
       var fhirClient = mkFhir(options);
-      fhirClient.search({
+      fhirClient
+        .search({
           type: this.resourceType,
-          query: args
+          query: args,
         })
         .then((response) => resolve(this.mapResource(response.data)))
         .catch(reject);
-
     });
   }
   /* Implements the  search by id operation for the configured resourceType
-  */
+   */
   searchById(args, context) {
     return new Promise((resolve, reject) => {
       logger.info(this.resourceType + ' >>> searchById');
-      let {
-        id
-      } = args;
+      let { id } = args;
       let options = {
         baseUrl: fhirClientConfig.baseUrl,
         auth: {
-          bearer: getToken(context)
-        }
+          bearer: getToken(context),
+        },
       };
       var fhirClient = mkFhir(options);
-      fhirClient.read({
+      fhirClient
+        .read({
           type: this.resourceType,
-          id: id
+          id: id,
         })
         .then((response) => {
           let data = response.data;
@@ -76,12 +74,12 @@ module.exports = class PassThroughService {
             data.meta = {};
           }
           resolve(this.mapResource(data));
-        }).catch(reject);
-
+        })
+        .catch(reject);
     });
   }
 
- // Methods below are not currently implemented
+  // Methods below are not currently implemented
   searchByVersionId(_args, _context) {
     return new Promise((resolve, _reject) => {
       logger.info(this.resourceType + ' >>> searchByVersionId');

@@ -3,8 +3,8 @@ const raw = require('config/raw').raw;
 const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
-  baseUrl: 'http://localhost',
-  debug: true
+  baseUrl: 'http://pathways.mitre.org:8180/fhir',
+  debug: true,
 };
 
 // note this has to be raw()-ified to prevent config from adding helper functions in config.profiles (has, get)
@@ -13,37 +13,34 @@ let fhirClientConfig = {
 let fhirServerConfig = raw({
   auth: {
     // This servers URI
-    resourceServer: 'http://localhost:3001',
+    resourceServer: 'http://localhost:8080',
     strategy: {
       name: 'bearer',
       useSession: false,
-      service: './src/strategies/bearer.strategy.js'
+      service: './src/strategies/bearer.strategy.js',
     },
   },
   server: {
     // support various ENV that uses PORT vs SERVER_PORT
-    port: 3001,
+    port: 8080,
     // allow Access-Control-Allow-Origin
     corsOptions: {
       maxAge: 86400,
-      origin: '*'
-    }
+      origin: '*',
+    },
   },
   logging: {
-    level: 'debug'
+    level: 'debug',
   },
   //
   // If you want to set up conformance statement with security enabled
   // Uncomment the following block
   //
-  security: [{
-      url: 'authorize',
-      valueUri: 'http://localhost:3001/auth/authorize'
-    },
+  security: [
     {
       url: 'token',
-      valueUri: 'http://localhost:3001/auth/token'
-    }
+      valueUri: 'http://moonshot-dev.mitre.org:8090/auth/realms/ehr/protocol/openid-connect/token',
+    },
     // optional - registration
   ],
 
@@ -65,88 +62,69 @@ let fhirServerConfig = raw({
   //   }
   // }
   profiles: {
-
-    'Patient': {
+    Patient: {
       service: './src/services/patient.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    // 'AdverseEvent': {
-    //   service: './src/services/adverseevent.service.js',
-    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']
-    // },
-    'AllergyIntolerance': {
-      service: './src/services/allergyintolerance.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
-    },
-
-    // 'CarePlan': {
-    // 	service: './src/services/careplan.service.js',
-    // 	versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'] ]
-    // },
-    'Condition': {
+    Condition: {
       service: './src/services/condition.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'Device': {
-      service: './src/services/device.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
-    },
-
-    'Encounter': {
+    Encounter: {
       service: './src/services/encounter.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    // 'Goal': {
-    //   service: './src/services/goal.service.js',
-    //   versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
-    // },
-
-    'Immunization': {
+    Immunization: {
       service: './src/services/immunization.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'MedicationAdministration': {
+    MedicationDispense: {
+      service: './src/services/medicationdispense.service',
+      versions: [VERSIONS['4_0_0']],
+    },
+
+    MedicationAdministration: {
       service: './src/services/medicationadministration.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'MedicationRequest': {
+    MedicationRequest: {
       service: './src/services/medicationrequest.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1']]
+      versions: [VERSIONS['4_0_0']],
     },
-    'MedicationOrder': {
-      service: './src/services/medicationorder.service',
-      versions: [VERSIONS['1_0_2']]
-    },
-    
-    'MedicationStatement': {
+
+    MedicationStatement: {
       service: './src/services/medicationstatement.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'Observation': {
+    Observation: {
       service: './src/services/observation.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'Practitioner': {
+    Practitioner: {
       service: './src/services/practitioner.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-    'Procedure': {
+    Procedure: {
       service: './src/services/procedure.service',
-      versions: [VERSIONS['4_0_0'], VERSIONS['3_0_1'], VERSIONS['1_0_2']]
+      versions: [VERSIONS['4_0_0']],
     },
 
-  }
+    ServiceRequest: {
+      service: './src/services/servicerequest.service',
+      versions: [VERSIONS['4_0_0']],
+    },
+  },
 });
 
 module.exports = {
   fhirServerConfig,
-  fhirClientConfig
+  fhirClientConfig,
 };
