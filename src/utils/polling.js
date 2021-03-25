@@ -8,6 +8,8 @@ const logger = loggers.get('default');
 const SUBSCRIPTION = 'subscriptions';
 const fhirClientConfig = config.fhirClientConfig;
 
+const TOPIC_URL = 'http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-topic-canonical';
+
 /**
  *
  * @param {String} topic - Subscription topic from topiclist
@@ -28,25 +30,16 @@ function pollSubscriptionTopics() {
   logger.info('Polling Subscription topics');
 
   // Get subscriptions with topics
-  const subscriptions = db.select(SUBSCRIPTION, (s) =>
-    s.extension && s.extension.some(
-      (e) =>
-        e.url ===
-        'http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-topic-canonical'
-    )
+  const subscriptions = db.select(
+    SUBSCRIPTION,
+    (s) => s.extension && s.extension.some((e) => e.url === TOPIC_URL)
   );
 
   // Remove duplicates with Set so we don't poll twice for same topic
   const topicsToPoll = [
     ...new Set(
       subscriptions.map((s) => {
-        if (!s.extension) { return; }
-
-        const topicExtension = s.extension.find(
-          e =>
-            e.url ===
-            'http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-topic-canonical'
-        );
+        const topicExtension = s.extension.find((e) => e.url === TOPIC_URL);
 
         return topiclist.parameter.find(p => p.valueCanonical === topicExtension.valueUri).name;
       })
