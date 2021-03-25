@@ -32,6 +32,8 @@ let fhirServerConfig = raw({
   logging: {
     level: 'debug',
   },
+  // Interval(in minutes) to poll for subscription topics
+  pollingInterval: 1,
   //
   // If you want to set up conformance statement with security enabled
   // Uncomment the following block
