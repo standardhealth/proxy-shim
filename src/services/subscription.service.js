@@ -22,8 +22,8 @@ module.exports.search = (_args, _context) => {
 
 module.exports.searchById = (args, _context) => {
   return new Promise((resolve, reject) => {
-    logger.info('Subscription >>> searchById');
     let { id } = args;
+    logger.info(`Subscription >>> searchById(${id})`);
     const result = db.select(SUBSCRIPTION, (r) => r.id === id);
     if (result.length >= 1) resolve(result);
     else reject({ message: `Subscription/${id} does not exist` });
@@ -32,8 +32,8 @@ module.exports.searchById = (args, _context) => {
 
 module.exports.create = (_args, { req }) => {
   return new Promise((resolve, reject) => {
-    logger.info('Subscription >>> create');
     const resource = req.body;
+    logger.info(`Subscription >>> create(${resource.id})`);
     if (!resource) reject({ message: 'Request must contain body.' });
     else if (!Object.keys(resource).length)
       reject({
@@ -47,8 +47,8 @@ module.exports.create = (_args, { req }) => {
 
 module.exports.update = (args, { req }) => {
   return new Promise((resolve, reject) => {
-    logger.info('Subscription >>> update');
     const { id } = args;
+    logger.info(`Subscription >>> update(${id})`);
     const resource = req.body;
     if (!id) reject({ message: 'Must include id' });
     else if (!resource) reject({ message: 'Request must contain body.' });
@@ -65,8 +65,8 @@ module.exports.update = (args, { req }) => {
 
 module.exports.remove = (args, _context) => {
   return new Promise((resolve, reject) => {
-    logger.info('Subscription >> remove');
     let { id } = args;
+    logger.info(`Subscription >> remove(${id})`);
     db.delete(SUBSCRIPTION, (r) => r.id === id);
     const operationOutcome = {
       resourceType: 'OperationOutcome',
