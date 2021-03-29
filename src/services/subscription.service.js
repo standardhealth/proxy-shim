@@ -34,11 +34,15 @@ module.exports.create = (_args, { req }) => {
   return new Promise((resolve, reject) => {
     const resource = req.body;
     logger.info(`Subscription >>> create(${resource.id})`);
-    if (!resource) reject({ message: 'Request must contain body.' });
-    else if (!Object.keys(resource).length)
+    if (!resource) {
+      reject({ message: 'Request must contain body.' });
+      return;
+    } else if (!Object.keys(resource).length) {
       reject({
         message: 'Empty body. Make sure Content-Type is set to application/fhir+json',
       });
+      return;
+    }
     if (!resource.id) resource.id = uuidv4();
     db.insert(SUBSCRIPTION, resource);
     resolve({ id: resource.id });
@@ -50,14 +54,21 @@ module.exports.update = (args, { req }) => {
     const { id } = args;
     logger.info(`Subscription >>> update(${id})`);
     const resource = req.body;
-    if (!id) reject({ message: 'Must include id' });
-    else if (!resource) reject({ message: 'Request must contain body.' });
-    else if (!Object.keys(resource).length)
+    if (!id) {
+      reject({ message: 'Must include id' });
+      return;
+    } else if (!resource) {
+      reject({ message: 'Request must contain body.' });
+      return;
+    } else if (!Object.keys(resource).length) {
       reject({
         message: 'Empty body. Make sure Content-Type is set to application/fhir+json',
       });
-    else if (resource.id !== id)
+      return;
+    } else if (resource.id !== id) {
       reject({ message: 'Query Param id and Subscription.id must match' });
+      return;
+    }
     db.upsert(SUBSCRIPTION, resource, (r) => r.id === id);
     resolve();
   });
