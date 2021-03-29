@@ -11,24 +11,21 @@ const config = require('config');
 const fhirServerConfig = config.get('fhirServerConfig').resolve();
 
 const main = function () {
-
   const server = new Server(fhirServerConfig);
   const port = fhirServerConfig.server.port;
   // add the auth component to the server application
-  server.app.use('/auth', auth(server) );
-  server.configureMiddleware()
-		.configureSession()
-		.configureHelmet()
-		.configurePassport()
-		.setPublicDirectory()
-		.setProfileRoutes()
-		.setErrorRoutes();
-	logger.info('FHIR Server successfully validated.');
-	// Start our server
-	server.listen(port, () =>
-		logger.info('FHIR Server listening on localhost:' + port)
-
-	);
+  server.app.use('/auth', auth(server));
+  server
+    .configureMiddleware()
+    .configureSession()
+    .configureHelmet()
+    .configurePassport()
+    .setPublicDirectory()
+    .setProfileRoutes()
+    .setErrorRoutes();
+  logger.info('FHIR Server successfully validated.');
+  // Start our server
+  server.listen(port, () => logger.info('FHIR Server listening on localhost:' + port));
   return server.app;
 };
 

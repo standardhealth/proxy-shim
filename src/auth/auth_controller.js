@@ -1,19 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const url = require('url');
 const bodyParser = require('body-parser');
 const request = require('request');
 const mkFhir = require('fhir.js');
 const config = require('config');
 const fhirClientConfig = config.fhirClientConfig;
-const options = {
-  baseUrl: fhirClientConfig.baseUrl,
-};
 
 /*
   Used to save the raw body of a response  as a variable on the response object
 */
-var rawBodySaver = function (req, res, buf, encoding) {
+var rawBodySaver = function (req, _res, buf, encoding) {
   if (buf && buf.length) {
     req.rawBody = buf.toString(encoding || 'utf8');
   }

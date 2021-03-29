@@ -121,6 +121,20 @@ let fhirServerConfig = raw({
       service: './src/services/servicerequest.service',
       versions: [VERSIONS['4_0_0']],
     },
+
+    Subscription: {
+      service: './src/services/subscription.service',
+      versions: [VERSIONS['4_0_0']],
+      operation: [
+        {
+          name: 'topiclist',
+          route: '/$topic-list',
+          method: 'GET',
+          reference:
+            'http://hl7.org/fhir/uv/subscriptions-backport/OperationDefinition/Backport-subscriptiontopic-list',
+        },
+      ],
+    },
   },
 });
 
