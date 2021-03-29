@@ -31,12 +31,15 @@
   },
   "dependencies": {
     "@asymmetrik/node-fhir-server-core": "^2.0.4",
+    "axios": "^0.21.1",
     "config": "3.0.1",
     "fhir-mapper": "^2.0.0",
     "fhir.js": "^0.0.22",
     "fhirpath": "0.10.1",
     "lokijs": "^1.5.11",
     "moment-timezone": "^0.5.14",
+    "node-jose": "^2.0.0",
+    "query-string": "^7.0.0",
     "underscore": "1.9.1",
     "uuid": "^8.3.2",
     "var": "^0.3.2"

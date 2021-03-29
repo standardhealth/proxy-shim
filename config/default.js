@@ -4,6 +4,7 @@ const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
   baseUrl: 'http://pathways.mitre.org:8180/fhir',
+  clientId: 'medmorph_backend',
   debug: true,
 };
 

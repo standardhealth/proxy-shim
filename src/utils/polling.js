@@ -3,6 +3,7 @@ const mkFhir = require('fhir.js');
 const config = require('config');
 const db = require('../storage/DataAccess');
 const topiclist = require('../../public/topiclist.json');
+const { getAccessToken } = require('./client');
 
 const logger = loggers.get('default');
 const SUBSCRIPTION = 'subscriptions';
@@ -26,7 +27,7 @@ function getSearchQuery(topic) {
   if (topic === 'demographic-change') return { type: 'Patient' };
 }
 
-function pollSubscriptionTopics() {
+async function pollSubscriptionTopics() {
   logger.info('Polling Subscription topics');
 
   // Get subscriptions with topics
@@ -51,13 +52,13 @@ function pollSubscriptionTopics() {
     return;
   }
 
+  const { baseUrl, clientId } = fhirClientConfig;
+  const accessToken = await getAccessToken(baseUrl, clientId);
   topicsToPoll.forEach((topic) => {
     logger.info(`Polling EHR for ${topic}.`);
     const options = {
-      baseUrl: fhirClientConfig.baseUrl,
-      auth: {
-        bearer: 'admin'
-      }
+      baseUrl,
+      auth: { bearer: accessToken },
     };
 
     const fhirClient = mkFhir(options);
@@ -79,7 +80,6 @@ function pollSubscriptionTopics() {
       })
       .catch((err) => logger.error(err));
   });
-
 }
 
 module.exports = { pollSubscriptionTopics };
