@@ -75,7 +75,7 @@ module.exports.update = (args, { req }) => {
 };
 
 module.exports.remove = (args, _context) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     let { id } = args;
     logger.info(`Subscription >> remove(${id})`);
     db.delete(SUBSCRIPTION, (r) => r.id === id);
