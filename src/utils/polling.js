@@ -16,14 +16,14 @@ const TOPIC_URL = 'http://hl7.org/fhir/uv/subscriptions-backport/StructureDefini
  * @returns {Object} - returns a FHIR search query object
  */
 function getSearchQuery(topic) {
-  if (topic.includes('encounter')) { return { type: 'Encounter' }; }
-  if (topic.includes('diagnosis')) { return { type: 'Condition' }; }
-  if (topic.includes('medication')) { return { type: 'Medication' }; }
-  if (topic.includes('labresult')) { return { type: 'Observation', query: { category: 'laboratory' } }; }
-  if (topic.includes('order')) { return { type: 'ServiceRequest' }; }
-  if (topic.includes('procedure')) { return { type: 'Procedure' }; }
-  if (topic.includes('immunization')) { return { type: 'Immunization' }; }
-  if (topic === 'demographic-change') { return { type: 'Patient' }; }
+  if (topic.includes('encounter')) return { type: 'Encounter' };
+  if (topic.includes('diagnosis')) return { type: 'Condition' };
+  if (topic.includes('medication')) return { type: 'Medication' };
+  if (topic.includes('labresult')) return { type: 'Observation', query: { category: 'laboratory' } };
+  if (topic.includes('order')) return { type: 'ServiceRequest' };
+  if (topic.includes('procedure')) return { type: 'Procedure' };
+  if (topic.includes('immunization')) return { type: 'Immunization' };
+  if (topic === 'demographic-change') return { type: 'Patient' };
 }
 
 function pollSubscriptionTopics() {
@@ -68,7 +68,7 @@ function pollSubscriptionTopics() {
 
         // Store fetched resources in local database
         if (data.total > 0) {
-          logger.info('Storing fetched resources into database.');
+          logger.info(`Storing ${data.total} fetched resources for ${topic} into database.`);
           const resources = data.entry.map(entry => entry.resource);
 
           resources.forEach((resource) => {
