@@ -70,7 +70,7 @@ module.exports.update = (args, { req }) => {
       return;
     }
     db.upsert(SUBSCRIPTION, resource, (r) => r.id === id);
-    resolve();
+    resolve({ id: id });
   });
 };
 
