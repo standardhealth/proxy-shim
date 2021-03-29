@@ -15,7 +15,6 @@ const main = function () {
   const port = fhirServerConfig.server.port;
   // add the auth component to the server application
   server.app.use('/auth', auth(server));
-  //   server.app.use('/Subscription', )
   server
     .configureMiddleware()
     .configureSession()
