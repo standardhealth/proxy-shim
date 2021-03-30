@@ -4,6 +4,7 @@ const VERSIONS = constants.VERSIONS;
 
 let fhirClientConfig = {
   baseUrl: 'http://pathways.mitre.org:8180/fhir',
+  clientId: 'medmorph_backend',
   debug: true,
 };
 
@@ -32,6 +33,8 @@ let fhirServerConfig = raw({
   logging: {
     level: 'debug',
   },
+  // Interval(in minutes) to poll for subscription topics
+  pollingInterval: 1,
   //
   // If you want to set up conformance statement with security enabled
   // Uncomment the following block
