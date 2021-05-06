@@ -34,7 +34,7 @@
     "fhir-mapper": "^2.0.0",
     "fhirpath": "0.10.1",
     "moment-timezone": "^0.5.14",
-    "underscore": "1.9.1",
+    "underscore": "1.12.1",
     "var": "^0.3.2",
     "config" : "3.0.1",
     "fhir.js":"git+https://github.com/FHIR/fhir.js.git"
