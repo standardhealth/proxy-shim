@@ -1,6 +1,6 @@
 const { Server, loggers } = require('@asymmetrik/node-fhir-server-core');
 const config = require('config');
-const auth = require('./auth/auth_controller');
+const auth = require('./auth/authController');
 // the config object is immutable by default.  This causes a problem because hte
 // FHIRServer initialize routine modifies the config structure and will fail to
 // start if it cannot modify the structure
