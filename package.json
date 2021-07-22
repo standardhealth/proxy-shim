@@ -11,9 +11,12 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production; node src/index.js;",
     "start:debug": "cross-env NODE_ENV=production; node debug src/index.js;",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint \"**/*.js\" --fix",
     "nodemon": "cross-env NODE_ENV=development; node scripts/nodemon;",
-    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test yarn test:lint && yarn test:jest --detectOpenHandles",
-    "test:lint": "eslint \"src/**/*.js\"",
+    "prettier": "prettier --check \"**/*.js\"",
+    "prettier:fix": "prettier --write \"**/*.js\"",
+    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=test npm run lint && npm run test:jest --detectOpenHandles",
     "test:jest": "jest --forceExit"
   },
   "jest": {
@@ -30,23 +33,32 @@
     ]
   },
   "dependencies": {
-    "@asymmetrik/node-fhir-server-core": "^2.0.4",
+    "@asymmetrik/node-fhir-server-core": "^2.2.3",
+    "body-parser": "^1.19.0",
+    "config": "3.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "fhir-mapper": "^2.0.0",
+    "fhir.js": "git+https://github.com/FHIR/fhir.js.git",
     "fhirpath": "0.10.1",
     "moment-timezone": "^0.5.14",
+    "passport-http-bearer": "^1.0.1",
+    "request": "^2.88.2",
+    "superagent": "^6.1.0",
     "underscore": "1.9.1",
-    "var": "^0.3.2",
-    "config" : "3.0.1",
-    "fhir.js":"git+https://github.com/FHIR/fhir.js.git"
+    "var": "^0.3.2"
   },
   "devDependencies": {
     "cross-env": "^5.1.6",
-    "eslint": "^4.14.0",
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
     "jest": "^23.5.0",
+    "nock": "10.0.6",
     "nodemon": "^1.18.3",
     "rewire": "4.0.1",
-    "supertest" : "3.3.0",
-    "nock" : "10.0.6"
+    "supertest": "3.3.0"
   },
   "private": false
 }
