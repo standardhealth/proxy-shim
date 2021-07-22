@@ -45,7 +45,7 @@
     "passport-http-bearer": "^1.0.1",
     "request": "^2.88.2",
     "superagent": "^6.1.0",
-    "underscore": "1.9.1",
+    "underscore": "^1.13.1",
     "var": "^0.3.2"
   },
   "devDependencies": {
