@@ -7,6 +7,7 @@ const mkFhir = require('fhir.js');
 const config = require('config');
 
 const { fhirClientConfig } = config;
+
 const options = {
   baseUrl: fhirClientConfig.baseUrl,
 };

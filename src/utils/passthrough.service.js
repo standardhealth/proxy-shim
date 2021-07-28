@@ -2,8 +2,9 @@ const { resolveSchema, loggers } = require('@asymmetrik/node-fhir-server-core');
 const mkFhir = require('fhir.js');
 const config = require('config');
 
-const logger = loggers.get('default');
 const { fhirClientConfig } = config;
+
+const logger = loggers.get('default');
 
 const getToken = (context) => context.req.user.context.token;
 

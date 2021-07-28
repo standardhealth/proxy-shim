@@ -8,7 +8,7 @@ describe('loading express', () => {
   let server;
   beforeEach(() => {
     /* eslint-disable-next-line global-require */
-    server = require('../../src/index');
+    server = require('../../src/authServer');
     nock('http://localhost:4001').get('/v/r2/metadata').reply(200, metadata);
 
     nock('http://localhost:4001')
