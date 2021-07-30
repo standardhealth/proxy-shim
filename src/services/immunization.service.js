@@ -1,9 +1,9 @@
-const PassThroughService = require('../utils/passthrough.service.js');
+const PassThroughService = require('../utils/passthrough.service');
 
 class ImmunizationService extends PassThroughService {
-    constructor(){
-      super('Immunization');
-    }
+  constructor() {
+    super('Immunization');
+  }
 }
 
 module.exports = new ImmunizationService();
