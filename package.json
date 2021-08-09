@@ -43,6 +43,7 @@
     "fhir-mapper": "^2.0.0",
     "fhir.js": "git+https://github.com/FHIR/fhir.js.git",
     "fhirpath": "0.10.1",
+    "mcode-extraction-framework": "git+https://github.com/mcode/mcode-extraction-framework.git#develop",
     "moment-timezone": "^0.5.14",
     "passport-http-bearer": "^1.0.1",
     "request": "^2.88.2",
